@@ -2,6 +2,7 @@ package co.fullstacklabs.cuboid.challenge.service.impl;
 
 import co.fullstacklabs.cuboid.challenge.dto.CuboidDTO;
 import co.fullstacklabs.cuboid.challenge.exception.ResourceNotFoundException;
+import co.fullstacklabs.cuboid.challenge.exception.UnprocessableEntityException;
 import co.fullstacklabs.cuboid.challenge.model.Bag;
 import co.fullstacklabs.cuboid.challenge.model.Cuboid;
 import co.fullstacklabs.cuboid.challenge.repository.BagRepository;
@@ -48,9 +49,38 @@ public class CuboidServiceImpl implements CuboidService {
     public CuboidDTO create(CuboidDTO cuboidDTO) {
         Bag bag = getBagById(cuboidDTO.getBagId());
         Cuboid cuboid = mapper.map(cuboidDTO, Cuboid.class);
+
+        if (bag.getAvailableVolume() < cuboidDTO.getVolume()) {
+            throw new UnprocessableEntityException("Bag volume exceeded");
+        }
+
         cuboid.setBag(bag);
         cuboid = repository.save(cuboid);
         return mapper.map(cuboid, CuboidDTO.class);
+    }
+
+    @Override
+    public CuboidDTO update(long cuboidId, CuboidDTO cuboidDTO) {
+        Bag updatedBag = getBagById(cuboidDTO.getBagId());
+        Cuboid record = repository.findById(cuboidId).orElseThrow(() -> new ResourceNotFoundException("Cuboid not found"));
+
+        if (updatedBag.getAvailableVolumeExceptOneCuboid(cuboidId) < cuboidDTO.getVolume()) {
+            throw new UnprocessableEntityException("Bag volume exceeded");
+        }
+
+        record.setBag(updatedBag);
+        record.setDepth(cuboidDTO.getDepth());
+        record.setWidth(cuboidDTO.getWidth());
+        record.setHeight(cuboidDTO.getHeight());
+
+        record = repository.save(record);
+        return mapper.map(record, CuboidDTO.class);
+    }
+
+    @Override
+    public void delete(long cuboidId) {
+        Cuboid record = repository.findById(cuboidId).orElseThrow(() -> new ResourceNotFoundException("Cuboid not found"));
+        repository.delete(record);
     }
 
     /**
@@ -64,6 +94,7 @@ public class CuboidServiceImpl implements CuboidService {
         return cuboids.stream().map(bag -> mapper.map(bag, CuboidDTO.class))
                 .collect(Collectors.toList());
     }
+
     private Bag getBagById(long bagId) {
         return bagRepository.findById(bagId).orElseThrow(() -> new ResourceNotFoundException("Bag not found"));
     }

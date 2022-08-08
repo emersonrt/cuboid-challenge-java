@@ -1,14 +1,10 @@
 package co.fullstacklabs.cuboid.challenge.dto;
 
+import co.fullstacklabs.cuboid.challenge.model.Bag;
+import lombok.*;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import co.fullstacklabs.cuboid.challenge.model.Bag;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Setter

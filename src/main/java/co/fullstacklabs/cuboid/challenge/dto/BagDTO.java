@@ -1,11 +1,9 @@
 package co.fullstacklabs.cuboid.challenge.dto;
 
+import co.fullstacklabs.cuboid.challenge.model.Bag;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
-
-import co.fullstacklabs.cuboid.challenge.model.Bag;
-
 import javax.validation.constraints.Size;
 import java.util.List;
 

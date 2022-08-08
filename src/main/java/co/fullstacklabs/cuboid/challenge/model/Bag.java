@@ -52,4 +52,22 @@ public class Bag {
     public void addCuboid(Cuboid cuboid) {
         cuboids.add(cuboid);
     }
+
+    public Double getPayloadVolume() {
+        return getCuboids().stream().mapToDouble(Cuboid::getVolume).sum();
+    }
+
+    public Double getAvailableVolume() {
+        return getVolume() - getPayloadVolume();
+    }
+
+    public Double getPayloadVolumeExceptOneCuboid(Long cuboidId) {
+        return getCuboids()
+                .stream().filter( cuboid -> !cuboid.getId().equals(cuboidId))
+                .mapToDouble(Cuboid::getVolume).sum();
+    }
+
+    public Double getAvailableVolumeExceptOneCuboid(Long cuboidId) {
+        return getVolume() - getPayloadVolumeExceptOneCuboid(cuboidId);
+    }
 }

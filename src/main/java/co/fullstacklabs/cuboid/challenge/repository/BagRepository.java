@@ -1,9 +1,8 @@
 package co.fullstacklabs.cuboid.challenge.repository;
 
+import co.fullstacklabs.cuboid.challenge.model.Bag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import co.fullstacklabs.cuboid.challenge.model.Bag;
 
 /**
  * @author FullStack Labs

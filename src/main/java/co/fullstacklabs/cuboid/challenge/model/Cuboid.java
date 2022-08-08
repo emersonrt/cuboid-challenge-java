@@ -29,4 +29,8 @@ public class Cuboid {
     @ManyToOne
     @JoinColumn(name = "BAG_ID", nullable = false)
     private Bag bag;
+
+    public Double getVolume() {
+        return Double.valueOf(getWidth() * getHeight() * getDepth());
+    }
 }
